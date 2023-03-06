@@ -7,6 +7,8 @@
     <groupId>org.ganmuren</groupId>
     <artifactId>chitchat</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <!--打包配置 打war包时改成war-->
+    <packaging>jar</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -19,14 +21,28 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
+            <!--去除默认json处理器-->
+            <!--<exclusions>
                 <exclusion>
-                    <!-- 去除默认json处理器 -->
                     <artifactId>jackson-databind</artifactId>
                     <groupId>com.fasterxml.jackson.core</groupId>
                 </exclusion>
-            </exclusions>
+            </exclusions>-->
+            <!--打war包时去除内置tomcat-->
+            <!--<exclusions>
+                <exclusion>
+                    <artifactId>org.springframework.boot</artifactId>
+                    <groupId>spring-boot-starter-tomcat</groupId>
+                </exclusion>
+            </exclusions>-->
         </dependency>
+
+        <!--打war包时添加provided的tomcat-->
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>-->
 
         <!--引入gson处理json-->
         <dependency>
@@ -121,6 +137,19 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
+        <!--应用监控依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!--admin可视化监控依赖 client端-->
+        <!--<dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
+            <version>2.1.5</version> &lt;!&ndash;注意版本&ndash;&gt;
+        </dependency>-->
+
     </dependencies>
 
     <properties>
@@ -128,13 +157,50 @@
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
+
     <!--构建配置-->
     <build>
+        <!--使用的插件列表-->
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!--在构建生命周期中执行一组目标的配置。每个目标可能有不同的配置。 -->
+                <executions>
+                    <execution>
+                        <!--配置的执行目标 target/classes/META-INF/build-info.propertes-->
+                        <goals>
+                            <goal>build-info</goal>
+                            <!--1查询端口号下进程 netstat -aon|findstr "8080" 2杀死进程taskkill -pid 进程pid -f   3性能调优jconsole-->
+                            <!--jar包运行 E:\workpace\chitchat\target>java -jar chitchat-1.0-SNAPSHOT.jar-->
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <nonFilteredFileExtensions>
+                        <!--配置MAVEN过滤p12等格式的文件, 否则使用maven编译或者打包的时候，对文件的内容进行了修改导致证书失效-->
+                        <nonFilteredFileExtension>p12</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+
+                </configuration>
+            </plugin>
+
+        </plugins>
+
         <resources>
             <!-- 打包resource里的项目配置文件 -->
             <resource>
                 <!--描述存放资源的目录，该路径相对POM路径，默认src/main/resources -->
                 <directory>src/main/resources</directory>
+                <!--开启过滤，用指定的参数替换directory下的文件中的参数-->
+                <filtering>true</filtering>
                 <!--包含的模式列表 全部**/** -->
                 <includes>
                     <include>**/**</include>

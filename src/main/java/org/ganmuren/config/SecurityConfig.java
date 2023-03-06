@@ -36,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()//开启配置
+                .antMatchers("/date").permitAll()
                 .antMatchers("/hello").permitAll() //允许所有人访问
                 .antMatchers("/user/**").hasRole("user") //访问/hello/**需要user角色
                 .antMatchers("/admin/**").hasRole("admin") //访问/admin/**需要user角色

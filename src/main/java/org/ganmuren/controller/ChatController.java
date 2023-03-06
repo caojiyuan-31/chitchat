@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,6 +39,11 @@ public class ChatController {
         log.debug("error!!!!!!!!!!!");
         log.info("info!!!!!!!!!!!");
         return "hello " + in + "!!!!!!!";
+    }
+
+    @GetMapping("/date")
+    public Date date(){
+        return new Date();
     }
 
     @GetMapping("/user/hello")

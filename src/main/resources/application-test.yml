@@ -1,10 +1,10 @@
 spring:
   gson:
     #手动添加的gson日期格式解析配置
-    date-format: yyyy-MM-dd
+    date-format: yyyy-MM-dd HH:mm:ss.SSS
   #指定访问静态资源的前缀/static，会导致index.html欢迎页无法加载，而使用类配置则可以,后续研究下
   mvc:
-    static-path-pattern: /static/**
+    static-path-pattern: /static/**, /assets
   #自定义静态资源目录 项目classpath:/static
   resources:
     static-locations: classpath:/static/
@@ -28,13 +28,18 @@ spring:
     #自动生成数据库表（关键）
     hibernate:
       ddl-auto: update
+#   boot:
+#     admin:
+#       client:
+#         #配置adminServer的地址
+#         url: http://localhost:8082
 
 
 server:
   port: 8081
   #ssl配置
   ssl:
-    key-store: key.p12
+    key-store: classpath:key.p12
     key-alias: tomcathttps
     key-store-password: 123456
   #该配置添加项目前缀会导致获取ico图标失效
@@ -42,6 +47,48 @@ server:
     context-path: /chitchat
   tomcat:
     uri-encoding: utf-8
+
+#actuator重度依赖Jackson，使用gson可能会报错
+management:
+  endpoints:
+    #关闭所有端点的配置
+#    enabled-by-default: false
+    web:
+      #代表启用单独的url地址来监控 Spring Boot 应用，默认的路径是 /actuator/*
+#      base-path: /monitor
+#      path-mapping:
+#        #将headth改为healths
+#        health: healths
+      exposure:
+        #端点启用配置见上，该为暴露端点配置，"*"有特殊含义需加双引号
+        #代表暴露全部监控，当然也可以配置需要开启的监控，如： include=beans,trace
+        include: health,info,mappings,env,beans,shutdown
+      #跨域相关支持
+#      cors:
+#        allowed-origins: https://localhost:8080
+#        allowed-methods: GET,POST
+  endpoint:
+#    beans:
+#      cache:
+#        #配置beans端点的缓存时间为100秒，添加security后存在用户信息输入，端点信息不会缓存
+#        time-to-live: 100s
+    health:
+      #always开启显示全部细节, never不显示细节, when_authorized只展示给认证用户roles: admin
+      show-details: when_authorized
+      roles: admin
+    shutdown:
+      #开启远程关闭应用端点，需post执行
+      enabled: true
+
+info:
+  author:
+    mame: ganmuren
+    email: 1101543410@qq.com
+  app:
+    #@@引用maven的定义,改动时需clean ${}引用properties的定义
+    java: @maven.compiler.source@
+    port: ${server.port}
+
 
 #spring log简单配置，使用logback-spring进行复杂配置
 #logging:

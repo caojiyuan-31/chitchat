@@ -17,7 +17,7 @@
             <!-- %n:换行符 -->
             <!-- %highlight():转换说明符以粗体红色显示其级别为ERROR的事件，红色为WARN，BLUE为INFO，以及其他级别的默认颜色。 -->
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) --- [%15.15(%thread)] %cyan(%-40.40(%logger{40})) : %msg%n</pattern>
-            <!-- 控制台也要使用UTF-8，不要使用GBK，否则会中文乱码 -->
+            <!-- 控制台也要使用UTF-8，不要使用GBK，否则会中文乱码  cmd用tomcat执行时改成gbk-->
             <charset>UTF-8</charset>
         </encoder>
     </appender>
@@ -96,9 +96,9 @@
     <logger name="com.ibatis.common.jdbc.SimpleDataSource" level="DEBUG"/>
     <logger name="com.ibatis.common.jdbc.ScriptRunner" level="DEBUG"/>
     <logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" level="DEBUG"/>
-    <logger name="java.sql.Connection" level="DEBUG"/>
-    <logger name="java.sql.Statement" level="DEBUG"/>
-    <logger name="java.sql.PreparedStatement" level="DEBUG"/>
+    <logger name="java.sql.Connection" level="info"/>
+    <logger name="java.sql.Statement" level="info"/>
+    <logger name="java.sql.PreparedStatement" level="info"/>
 
     <!--org.ganmuren包打印info及更高级别的日志 Logger记录器-->
     <!--在logback中，输出目标称为appender，addAppender方法将appender添加到给定的记录器logger-->

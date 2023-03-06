@@ -12,7 +12,7 @@ import java.lang.reflect.Modifier;
 /**
  * @author ganmuren
  */
-@Configuration
+//@Configuration //去除gson手动配置
 public class GsonConfig {
 
     // 读取配置文件的时间格式
@@ -27,7 +27,7 @@ public class GsonConfig {
         GsonHttpMessageConverter converter = new GsonHttpMessageConverter();
         converter.setGson(new GsonBuilder()
                 .setDateFormat(dateFormat)//处理时间戳
-                .excludeFieldsWithModifiers(Modifier.PROTECTED)//过滤字段类型PROTECTED
+                .excludeFieldsWithModifiers(Modifier.PROTECTED)//过滤字段类型PROTECTED，会导致actuator/health报错,后续研究下
                 .create());
         return converter;
     }
