@@ -1,0 +1,53 @@
+spring:
+  gson:
+    #手动添加的gson日期格式解析配置
+    date-format: yyyy-MM-dd
+  #指定访问静态资源的前缀/static，会导致index.html欢迎页无法加载，而使用类配置则可以,后续研究下
+  mvc:
+    static-path-pattern: /static/**
+  #自定义静态资源目录 项目classpath:/static
+  resources:
+    static-locations: classpath:/static/
+
+  #spring数据库连接配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #高版本 Mysql 驱动时，配置的 driver-class-name 不再是 com.mysql.jdbc.Driver，url 后面必须设置时区 serverTimezone
+    url: jdbc:mysql://localhost:3306/chitchat?serverTimezone=Asia/Shanghai&useTimezone=true
+    username: root
+    password: 123456
+    #切换Druid数据源，引入spring-boot-starter-data-jdbc时默认为HikariDataSource数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+
+  #jpa相关配置
+  jpa:
+    #jpa配置：在控制台显示Hibernate的sql(可选)
+    show-sql: true
+    #对应数据库(可选)
+    database: mysql
+    #自动生成数据库表（关键）
+    hibernate:
+      ddl-auto: update
+
+
+server:
+  port: 8081
+  #ssl配置
+  ssl:
+    key-store: key.p12
+    key-alias: tomcathttps
+    key-store-password: 123456
+  #该配置添加项目前缀会导致获取ico图标失效
+  servlet:
+    context-path: /chitchat
+  tomcat:
+    uri-encoding: utf-8
+
+#spring log简单配置，使用logback-spring进行复杂配置
+#logging:
+#  level:
+#    org.ganmuren: info #该包打印info及更高级别的日志
+#  pattern: #日志打印规则
+#    console: "%d %-5level %logger : %msg%n"
+#    file: "%d %-5level [%thread] %logger : %msg%n"
+#  file: logs/chitchat.log
