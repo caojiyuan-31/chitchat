@@ -13,11 +13,18 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.5.RELEASE</version>
+        <version>2.6.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -150,35 +157,47 @@
             <version>2.1.5</version> &lt;!&ndash;注意版本&ndash;&gt;
         </dependency>-->
 
+        <dependency>
+            <groupId>org.import</groupId>
+            <artifactId>import</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <!-- dubbo -->
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-spring-boot-starter</artifactId>
+            <version>3.0.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-rpc-dubbo</artifactId>
+            <version>3.0.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-rpc-rest</artifactId>
+            <version>3.0.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-registry-zookeeper</artifactId>
+            <version>3.0.7</version>
+        </dependency>
+
     </dependencies>
 
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
 
 
+    <!--1查询端口号下进程 netstat -aon|findstr "8080" 2杀死进程taskkill -pid 进程pid -f   3性能调优jconsole-->
+    <!--jar包运行 E:\workpace\chitchat\target>java -jar chitchat-1.0-SNAPSHOT.jar-->
     <!--构建配置-->
     <build>
         <!--使用的插件列表-->
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <!--在构建生命周期中执行一组目标的配置。每个目标可能有不同的配置。 -->
-                <executions>
-                    <execution>
-                        <!--配置的执行目标 target/classes/META-INF/build-info.propertes-->
-                        <goals>
-                            <goal>build-info</goal>
-                            <!--1查询端口号下进程 netstat -aon|findstr "8080" 2杀死进程taskkill -pid 进程pid -f   3性能调优jconsole-->
-                            <!--jar包运行 E:\workpace\chitchat\target>java -jar chitchat-1.0-SNAPSHOT.jar-->
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
+            <!--文件格式过滤处理-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -188,9 +207,51 @@
                         <!--配置MAVEN过滤p12等格式的文件, 否则使用maven编译或者打包的时候，对文件的内容进行了修改导致证书失效-->
                         <nonFilteredFileExtension>p12</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
-
                 </configuration>
             </plugin>
+
+            <!--可执行文件打包插件-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!--可执行jar文件名称后缀-->
+                <configuration>
+                    <classifier>exec</classifier>
+                </configuration>
+                <!--在构建生命周期中执行一组目标的配置。每个目标可能有不同的配置。 -->
+                <executions>
+                    <execution>
+                        <!--配置的执行目标 target/classes/META-INF/build-info.propertes-->
+                        <goals>
+                            <!--<goal>build-info</goal>-->
+                            <!--可以把依赖的包都打包到生成的Jar包中 -->
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <!--打包可被外部程序依赖的jar-->
+            <!--<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>lib</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>lib</classifier>
+                            <excludes>
+                                <exclude>*.yml</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>-->
 
         </plugins>
 

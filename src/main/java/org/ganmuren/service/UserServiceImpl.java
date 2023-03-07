@@ -1,12 +1,15 @@
 package org.ganmuren.service;
 
+
 import com.google.gson.Gson;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.ganmuren.dao.RoleRepository;
 import org.ganmuren.dao.UserRepository;
 import org.ganmuren.dao.UserRoleRepository;
 import org.ganmuren.entity.Role;
 import org.ganmuren.entity.User;
 import org.ganmuren.entity.UserRole;
+import org.muren.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,8 +18,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@DubboService
 @Service
-public class UserService implements UserDetailsService {
+public class UserServiceImpl implements UserService, UserDetailsService{ //Dubbo提供接口应位于首位,否则消费者无法找到
 
     @Autowired
     UserRepository userRepository;
@@ -55,6 +59,12 @@ public class UserService implements UserDetailsService {
                 userRoleRepository.save(new UserRole(result.getId(), role.getId()));
             }
         }
+    }
+
+    @Override
+    public String getUserJsonById(Integer id) {
+        User user = userRepository.findById(id).orElse(new User());
+        return new Gson().toJson(user);
     }
 
 }

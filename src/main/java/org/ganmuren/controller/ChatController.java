@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.ganmuren.entity.Role;
 import org.ganmuren.entity.User;
-import org.ganmuren.service.UserService;
+import org.ganmuren.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -30,7 +30,8 @@ import java.util.List;
 public class ChatController {
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userServiceImpl;
+
 
     //@GetMapping是一个组合注解，是@RequestMapping(method = RequestMethod.GET)的缩写
     @GetMapping("/hello")
@@ -51,6 +52,11 @@ public class ChatController {
         return "hello user";
     }
 
+    @GetMapping("/user/{id}")
+    public String getById(@PathVariable Integer id) {
+        return userServiceImpl.getUserJsonById(id);
+    }
+
     @GetMapping("/admin/hello")
     public String adminHello() {
         return "hello admin";
@@ -58,7 +64,7 @@ public class ChatController {
 
     @PostMapping("/admin/sign")
     public String sign(String username, String password) {
-        if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
+        if(StringUtils.hasLength(username) || StringUtils.hasLength(password)){
             return "账号或密码为空";
         }
         User user = new User();
@@ -72,7 +78,7 @@ public class ChatController {
         user.setRoles(roles);
 
         try{
-            userService.signUser(user);
+            userServiceImpl.signUser(user);
         }catch (UsernameNotFoundException e){
             return "账号名已存在";
         }

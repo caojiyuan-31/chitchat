@@ -1,5 +1,6 @@
 package org.ganmuren;
 
+import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration;
@@ -11,6 +12,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  */
 //@SpringBootApplication = @SpringBootConfiguration + @EnableAutoConfiguration + @ComponentScan
 @SpringBootApplication(exclude = {GsonAutoConfiguration.class}) //去除gson自动配置
+@EnableDubbo
 public class Application //extends SpringBootServletInitializer
 {
 
