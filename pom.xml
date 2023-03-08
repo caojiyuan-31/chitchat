@@ -215,9 +215,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <!--可执行jar文件名称后缀-->
-                <configuration>
+                <!--<configuration>
                     <classifier>exec</classifier>
-                </configuration>
+                </configuration>-->
                 <!--在构建生命周期中执行一组目标的配置。每个目标可能有不同的配置。 -->
                 <executions>
                     <execution>

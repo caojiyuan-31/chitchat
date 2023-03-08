@@ -118,15 +118,15 @@
         <!-- configuration中最多允许一个root，别的logger如果没有设置级别则从父级别root继承 -->
         <root level="info">
             <appender-ref ref="STDOUT" />
-            <appender-ref ref="info_log" />
-            <appender-ref ref="error_log" />
+            <!--<appender-ref ref="info_log" />
+            <appender-ref ref="error_log" />-->
         </root>
     </springProfile>
 
     <!--开发环境:输出到文件-->
     <springProfile name="dev">
         <root level="info">
-            <appender-ref ref="info_log" />
+            <appender-ref ref="STDOUT" />
             <appender-ref ref="error_log" />
         </root>
     </springProfile>
