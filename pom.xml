@@ -190,6 +190,23 @@
     </dependencies>
 
 
+    <!--# 查询端口号下进程以下几种命令均可
+    ps -ef | grep java 查看当前运行的java进程
+    ps -ef | grep xxx.jar 查看当前运行的jar进程
+
+    ps aux | grep xxx.jar
+    # ps：process status的简称，用于显示当前进程的状态；
+    # a：all简称，显示所有程序；
+    # u：user简称，以用户为主的格式来显示；
+    # x：显示所有程序，不区分终端机；
+
+    # 查看某端口对应的线程pid
+    netstat -nlp |grep :9181
+
+    # 根据进程号查看端口号
+    netstat -anop | grep 15161-->
+
+    <!--杀死进程 kill -9 jar包pid-->
 
     <!--1查询端口号下进程 netstat -aon|findstr "8080" 2杀死进程taskkill -pid 进程pid -f   3性能调优jconsole-->
     <!--jar包运行 E:\workpace\chitchat\target>java -jar chitchat-1.0-SNAPSHOT.jar-->
